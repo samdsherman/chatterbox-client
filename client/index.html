@@ -30,7 +30,7 @@
     <div class="col-md-2" id="leftColumn"></div>
 
     <div class="col-md-8" id="middleColumn">
-
+    <!-- navbar -->
       <nav class='navbar navbar-default navbar-fixed-top'>
         <div class='container'>
           <div class='navbar-header'>
@@ -45,7 +45,7 @@
               <div class="col-sm-8">
                 <select class='form-control navbar-btn' id='roomSelect'>
                   <option value="newroom">New Room...</option>
-                  <option value="lobby" selected="selected">lobby</option>
+                  <option value="default" selected="selected">default</option>
                 </select>
               </div>
             </div>
@@ -56,7 +56,7 @@
             </li>
         </div>
       </nav>
-
+      <!-- Send form -->
       <div class='form-group-lg' id="sendForm">
         
         <form class='form-horizontal' action="#" id="send" method="post">
@@ -69,11 +69,20 @@
         </form>
 
       </div>
+      <!-- chats append to here -->
+      <ul class="nav nav-tabs" role='tablist'>
+        <li role='presentation' class='active'>
+          <a href='#default' role='tab' data-toggle='tab'>Default</a>
+        </li>
+      </ul>
+
+
 
       <div id="chats"></div>
 
 
       </div>
+
     <div class="col-md-2" id="rightColumn"></div>
 
     <link href="bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" type="text/css" />

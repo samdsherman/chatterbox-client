@@ -112,11 +112,6 @@ form input[type=text] {
   font-weight: 800;
 }*/
 
-.chat .username:hover {
-  color: red;
-  cursor: pointer;
-}
-
 /*.chat:hover {
   background-color: #ddd;
 }*/
@@ -131,9 +126,27 @@ form input[type=text] {
   padding: 10px;
 }
 
-.friend {
+.friend .text{
   color: #fff;
   background-color: #0090da;
   font-style: italic;
 }
 
+.panel-title {
+  display: inline-block;
+}
+
+.at {
+  color: green;
+  font-size: 1.3em;
+}
+
+.panel-heading:hover, .panel-heading:hover span{
+  color: blue;
+  cursor: pointer;
+}
+
+.panel-footer {
+  font-size: 11px;
+  padding: 0 10px;
+}
