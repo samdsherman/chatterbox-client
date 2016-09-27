@@ -25,6 +25,7 @@ app.init = function init() {
   $('body').on('click', '.username', app.handleUsernameClick);
   $('body').on('submit', '#send', app.handleSubmit );
   $('body').on('change', '#roomSelect', app.roomChange);
+  $('body').on('click', '#refreshButton', app.refresh);
 };
 
 app.send = function send(data) {

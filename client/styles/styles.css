@@ -1,113 +1,139 @@
 body {
-    background: #f5f8fa;
-    text-align: center;
-    padding: 0 25px;
-    margin-top: 70px;
-    font-family: arial, sans-serif;
+  background: #f5f8fa;
+  text-align: center;
+  padding: 0 25px;
+  margin-top: 70px;
+  font-family: arial, sans-serif;
 }
 
 .navbar {
-    background-color: #337ab7;
+  background-color: #337ab7;
 }
 
-.navbar-default {
-    color: #fff ;
+.navbar-default .navbar-brand {
+  color: #fff ;
+}
+
+.glyphicon-gift {
+  font-size: 1.2em;
 }
 
 
 
 #main, #chats {
-    width: 100%;
-    margin: auto;
-    text-align: left;
-    background: white;
-    padding: 50px 60px;
-    border: solid #ddd;
-    border-width: 0 1px 1px 1px;
+  width: 100%;
+  margin: auto;
+  text-align: left;
+  background: white;
+  padding: 50px 60px;
+  border: solid #ddd;
+  border-width: 0 1px 1px 1px;
 }
 
 #main {
-    background-color: #5bc0de;
+  background-color: #5bc0de;
 }
 
 
 
 #main h1 {
-    margin-top: 0;
-    font-size: 35px;
-    margin-bottom: 5px;
-    padding: 5px;
+  margin-top: 0;
+  font-size: 35px;
+  margin-bottom: 5px;
+  padding: 5px;
 }
 
 #main h1 span {
-    font-style:italic;
+  font-style:italic;
 }
 
 #main ul {
-    padding-left: 20px;
+  padding-left: 20px;
 }
 
 #main .error {
-    border: 1px solid red;
-    background: #FDEFF0;
-    padding: 20px;
+  border: 1px solid red;
+  background: #FDEFF0;
+  padding: 20px;
 }
 
 #main .success {
-    margin-top: 25px;
+  margin-top: 25px;
 }
 
 #main .success code {
-    font-size: 12px;
-    color: green;
-    line-height: 13px;
+  font-size: 12px;
+  color: green;
+  line-height: 13px;
 }
 
 form {
-    padding-top: 20px;
-    margin-bottom: 20px;
+  padding-top: 20px;
+  margin-bottom: 20px;
 }
 
 form input[type=text] {
-    margin-right: 10px;
-    font-size: 12px;
+  margin-right: 10px;
+  font-size: 12px;
 }
+
+.chatRoomLabel {
+  padding-top: 15px;
+}
+
 #roomSelect {
-    margin-top: 20px;
+  margin-top: 14px;
+  padding-right: 0;
+}
+
+.navbar-btn {
+  margin-top: 0;
+}
+
+.chatRoomLabel {
+  text-align: right;
+  padding-right: 0;
+  font-size: 1.5em;
+  color: #fff;
+
+}
+
+.navbar-right {
+  margin-top: 5px;
 }
 
 /*.chat {
-    padding: 5px;
-    margin-bottom: 5px;
-    background-color: #eee;
+  padding: 5px;
+  margin-bottom: 5px;
+  background-color: #eee;
 }*/
 
 /*.chat .username {
-    font-weight: 800;
+  font-weight: 800;
 }*/
 
 .chat .username:hover {
-    color: red;
-    cursor: pointer;
+  color: red;
+  cursor: pointer;
 }
 
 /*.chat:hover {
-    background-color: #ddd;
+  background-color: #ddd;
 }*/
 
 .spinner {
-    float: right;
-    height: 46px;
-    margin-bottom: 5px;
+  float: right;
+  height: 46px;
+  margin-bottom: 5px;
 }
 
 .spinner img {
-    padding: 10px;
+  padding: 10px;
 }
 
 .friend {
-    color: #fff;
-    background-color: #0090da;
-    font-style: italic;
+  color: #fff;
+  background-color: #0090da;
+  font-style: italic;
 }
 

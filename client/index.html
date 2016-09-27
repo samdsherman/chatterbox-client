@@ -32,21 +32,30 @@
     <div class="col-md-8" id="middleColumn">
 
       <nav class='navbar navbar-default navbar-fixed-top'>
-        <div class='container-fluid'>
+        <div class='container'>
           <div class='navbar-header'>
-            <a class='navbar-brand' href='#'>chatterBox</a>
+            <a class='navbar-brand' href='#'>
+              <span class="glyphicon glyphicon-gift glyphicon-align-left" aria-hidden="true"></span>
+              <h3 style="display: inline;">chatterBox</h3>
+            </a>
           </div>
+          <div class="navbar-nav navbar-collapse" id="bs-example-navbar-collapse-1">
+            <div class="form-group">
+              <label for="roomSelect" class="col-sm-4 control-label chatRoomLabel">ChatRooms:</label>
+              <div class="col-sm-8">
+                <select class='form-control navbar-btn' id='roomSelect'>
+                  <option value="newroom">New Room...</option>
+                  <option value="lobby" selected="selected">lobby</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <ul class="nav navbar-nav navbar-right navbar-collapse">
+            <li>
+              <button class='btn btn-success btn-lg glyphicon glyphicon-refresh' id='refreshButton'></button>
+            </li>
         </div>
       </nav>
-
-      <button class='btn btn-default' onclick="app.refresh()">Refresh</button>
-
-      <div id="roomInput" class='dropdown'>
-        <select class='form-control' id='roomSelect'>
-          <option value="newroom">New Room...</option>
-          <option value="lobby" selected="selected">lobby</option>
-        </select>
-      </div>
 
       <div class='form-group-lg' id="sendForm">
         
