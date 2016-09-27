@@ -11,7 +11,6 @@ app.server = 'https://api.parse.com/1/classes/messages';
 //app functions//////////////////////////////////////////////////////
 app.fetchSuccess = function fetchSuccess(data) {
   var messages = data.responseJSON.results;
-  console.log(messages);
   messages.forEach(function(message) {
     app.renderMessage(message);
   });
@@ -20,7 +19,7 @@ app.fetchSuccess = function fetchSuccess(data) {
 app.init = function init() {
   $('.username').on('click', app.handleUsernameClick);
   $('#send').submit( app.handleSubmit );
-  console.log( $('form') );
+  $('#roomSelect').find('.roomDropDown');
 };
 
 app.send = function send(data) {
@@ -34,12 +33,12 @@ app.send = function send(data) {
   });
 };
 
-app.fetch = function fetch() {
+app.fetch = function fetch(handler) {
   // $.get(app.server, success);
   var data = $.ajax({
     type: 'GET',
     url: app.server,
-    complete: app.fetchSuccess
+    complete: handler || app.fetchSuccess
   });
   return data;
 };
@@ -51,7 +50,7 @@ app.clearMessages = function clearMessages() {
 app.renderMessage = function renderMessage(message) {
 
   var $newMessage = $(
-    `<div class="message">
+    `<div class="chat">
       <span class="username"></span>
 
       <span class="text"></span>
@@ -94,6 +93,12 @@ app.getQueryVariable = function getQueryVariable(variable) {
     }
   }
   return false;
+};
+
+app.refresh = function refresh() {
+  app.clearMessages();
+  app.fetch();
+  app.init();
 };
 
 

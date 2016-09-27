@@ -1,5 +1,16 @@
 //get data
-var data = app.fetch();
-$(document).ready(app.init);
+$(document).ready(function() {
+  $('#username').text(app.getQueryVariable('username'));
+
+
+
+  app.refresh();
+  setInterval(app.refresh, 5000);
+
+
+
+
+
+});
 // console.log(data)
   //diplay the data
