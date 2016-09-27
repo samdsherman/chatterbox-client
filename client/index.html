@@ -35,7 +35,7 @@
     </div>
     <button onclick="app.refresh()">Refresh</button>
     <div id="roomSelect" class='dropdown'>
-      <select class='roomDropDown'>
+      <select id='roomDropDown'>
         <option value="newroom">New Room...</option>
         <option value="lobby" selected="selected">lobby</option>
       </select>
@@ -44,7 +44,7 @@
     <div id="sendForm">
       
       <form action="#" id="send" method="post">
-        <input type="text" name="message" id="message">
+        <input type="text" name="message" id="message" placeholder="Your thoughts">
         <input type="submit" name="submit" class="submit">
       </form>
 

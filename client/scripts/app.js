@@ -1,5 +1,4 @@
 // https://api.parse.com/1/classes/messages
-console.log('page refreshed');
 //get data from app.server
 var data;
 var app = {};
@@ -18,14 +17,14 @@ app.fetchSuccess = function fetchSuccess(data) {
     app.renderMessage(message);
     //look at message.roomname
     app.renderRoom(message.roomname);
-      //update rooms
   });
+  app.highlightFriends();
 };
 
 app.init = function init() {
   $('body').on('click', '.username', app.handleUsernameClick);
   $('body').on('submit', '#send', app.handleSubmit );
-  $('body').on('change', '.roomDropDown', app.roomChange);
+  $('body').on('change', '#roomSelect', app.roomChange);
 };
 
 app.send = function send(data) {
@@ -67,31 +66,36 @@ app.renderMessage = function renderMessage(message) {
   $('#chats').append($newMessage);
 };
 
-app.renderRoom = function renderRoom(roomName) {
-  if ( app.roomNames[roomName] ) {
-    return;
-  }
-  app.roomNames[roomName] = 1;
-  var newRoom = $('<option></option>').attr('value', roomName);
-  newRoom.text(roomName).attr('selected', 'selected');
-  $('#roomSelect').find('.roomDropDown').append(newRoom);
-};
 
 app.handleUsernameClick = function handleUsernameClick() {
   var $this = $(this);
   var username = $this.text();
   app.friends[username] = !app.friends[username];
-  
   app.highlightFriends();
 };
 
+app.renderRoom = function renderRoom(roomName, setDefault) {
+  if ( app.roomNames[roomName] ) {
+    // $('#roomSelect').filter(function() {
+    //   return $(this).val() === roomName;
+    // }).attr('selected', 'selected');
+    return;
+  }
+
+  app.roomNames[roomName] = 1;
+  var newRoom = $('<option></option>').attr('value', roomName);
+  newRoom.text(roomName);
+  //Will set the room you chose as the default if it existed
+  if (setDefault) { newRoom.attr('selected', 'selected'); }
+
+  $('#roomSelect').append(newRoom);
+};
+
 app.roomChange = function roomChange() {
-  app.room = $('#roomSelect').find('.roomDropDown').val();
-  console.log(app.room);
+  app.room = $('#roomSelect').find('#roomSelect').val();
   if (app.room === 'newroom') {
     app.room = window.prompt('New room name', 'Enter new room name');
-
-    app.renderRoom(app.room);
+    app.renderRoom(app.room, true);
   }
 
   app.clearMessages();
@@ -100,6 +104,14 @@ app.roomChange = function roomChange() {
   } else {
     app.fetch(app.roomChangeFetchHandler);
   }
+  //selects the room you want as default
+  $('#roomSelect').filter(function() {
+    return $(this).val() === app.room;
+  }).attr('selected', 'selected');
+
+
+  app.highlightFriends();
+
 };
 
 app.roomChangeFetchHandler = function(data) {
@@ -109,6 +121,8 @@ app.roomChangeFetchHandler = function(data) {
       app.renderMessage(message);
     }
   });
+  app.highlightFriends();
+
 };
 
 app.handleSubmit = function handleSubmit(event) {
@@ -119,9 +133,11 @@ app.handleSubmit = function handleSubmit(event) {
     username: app.getQueryVariable('username'),
     roomname: app.room
   };
-  console.log(obj);
   app.send(obj);
   app.refresh();
+  $( '#send' ).each(function() {
+    this.reset();
+  });
   return false;
 
 };
@@ -149,6 +165,7 @@ app.refresh = function refresh() {
 
 app.highlightFriends = function highlightFriends() {
   var messages = $('.chat');
+
   messages.each(function(index) {
     var element = $(messages[index]);
     var username = element.find('.username').text();
@@ -157,7 +174,6 @@ app.highlightFriends = function highlightFriends() {
     } else {
       element.removeClass('friend');
     }
-
   });
 };
 
