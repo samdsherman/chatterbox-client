@@ -52,6 +52,13 @@ app.clearMessages = function clearMessages() {
   $('#chats').empty();
 };
 
+app.handleUsernameClick = function handleUsernameClick() {
+  var $this = $(this);
+  var username = $this.text();
+  app.friends[username] = !app.friends[username];
+  app.highlightFriends();
+};
+
 app.renderMessage = function renderMessage(message) {
 
   var $newMessage = $(
@@ -66,19 +73,8 @@ app.renderMessage = function renderMessage(message) {
   $('#chats').append($newMessage);
 };
 
-
-app.handleUsernameClick = function handleUsernameClick() {
-  var $this = $(this);
-  var username = $this.text();
-  app.friends[username] = !app.friends[username];
-  app.highlightFriends();
-};
-
 app.renderRoom = function renderRoom(roomName, setDefault) {
   if ( app.roomNames[roomName] ) {
-    // $('#roomSelect').filter(function() {
-    //   return $(this).val() === roomName;
-    // }).attr('selected', 'selected');
     return;
   }
 
@@ -92,7 +88,7 @@ app.renderRoom = function renderRoom(roomName, setDefault) {
 };
 
 app.roomChange = function roomChange() {
-  app.room = $('#roomSelect').find('#roomSelect').val();
+  app.room = $('#roomSelect').val();
   if (app.room === 'newroom') {
     app.room = window.prompt('New room name', 'Enter new room name');
     app.renderRoom(app.room, true);
@@ -108,8 +104,6 @@ app.roomChange = function roomChange() {
   $('#roomSelect').filter(function() {
     return $(this).val() === app.room;
   }).attr('selected', 'selected');
-
-
   app.highlightFriends();
 
 };
