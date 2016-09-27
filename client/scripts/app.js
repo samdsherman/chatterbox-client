@@ -9,6 +9,7 @@ var app = {};
 app.server = 'https://api.parse.com/1/classes/messages';
 app.room = 'lobby';
 app.roomNames = {};
+app.friends = {};
 
 //app functions//////////////////////////////////////////////////////
 app.fetchSuccess = function fetchSuccess(data) {
@@ -22,9 +23,9 @@ app.fetchSuccess = function fetchSuccess(data) {
 };
 
 app.init = function init() {
-  $('.username').on('click', app.handleUsernameClick);
-  $('#send').submit( app.handleSubmit );
-  $('#roomSelect').find('.roomDropDown').on('change', app.roomChange);
+  $('body').on('click', '.username', app.handleUsernameClick);
+  $('body').on('submit', '#send', app.handleSubmit );
+  $('body').on('change', '.roomDropDown', app.roomChange);
 };
 
 app.send = function send(data) {
@@ -77,7 +78,11 @@ app.renderRoom = function renderRoom(roomName) {
 };
 
 app.handleUsernameClick = function handleUsernameClick() {
-
+  var $this = $(this);
+  var username = $this.text();
+  app.friends[username] = !app.friends[username];
+  
+  app.highlightFriends();
 };
 
 app.roomChange = function roomChange() {
@@ -140,9 +145,21 @@ app.refresh = function refresh() {
   } else {
     app.fetch(app.roomChangeFetchHandler);
   }
-  app.init();
 };
 
+app.highlightFriends = function highlightFriends() {
+  var messages = $('.chat');
+  messages.each(function(index) {
+    var element = $(messages[index]);
+    var username = element.find('.username').text();
+    if (app.friends[username]) {
+      element.addClass('friend');
+    } else {
+      element.removeClass('friend');
+    }
+
+  });
+};
 
 
 

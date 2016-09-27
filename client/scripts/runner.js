@@ -1,7 +1,7 @@
 //get data
 $(document).ready(function() {
   $('#username').text(app.getQueryVariable('username'));
-
+  app.init();
 
 
   app.refresh();
