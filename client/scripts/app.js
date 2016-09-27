@@ -62,10 +62,11 @@ app.handleUsernameClick = function handleUsernameClick() {
 app.renderMessage = function renderMessage(message) {
 
   var $newMessage = $(
-    `<div class="chat">
-      <span class="username"></span>
-
-      <span class="text"></span>
+    `<div class="chat panel panel-primary">
+      <div class="panel-heading">
+        <h3 class="username panel-title"></h3>
+      </div>
+      <div class="text  panel-body"></div>
      </div>`);
   $newMessage.find('.username').text(message.username);
   $newMessage.find('.text').text(message.text);
