@@ -5,7 +5,7 @@ $(document).ready(function() {
 
 
   app.refresh();
-  setInterval(app.refresh, 5000);
+  // setInterval(app.refresh, 5000);
 
 
 

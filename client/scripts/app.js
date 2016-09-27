@@ -1,5 +1,5 @@
 // https://api.parse.com/1/classes/messages
-
+console.log('page refreshed');
 //get data from app.server
 var data;
 var app = {};
@@ -7,19 +7,24 @@ var app = {};
 //app properties/////////////////////////////////////////////////////
 
 app.server = 'https://api.parse.com/1/classes/messages';
+app.room = 'lobby';
+app.roomNames = {};
 
 //app functions//////////////////////////////////////////////////////
 app.fetchSuccess = function fetchSuccess(data) {
   var messages = data.responseJSON.results;
   messages.forEach(function(message) {
     app.renderMessage(message);
+    //look at message.roomname
+    app.renderRoom(message.roomname);
+      //update rooms
   });
 };
 
 app.init = function init() {
   $('.username').on('click', app.handleUsernameClick);
   $('#send').submit( app.handleSubmit );
-  $('#roomSelect').find('.roomDropDown');
+  $('#roomSelect').find('.roomDropDown').on('change', app.roomChange);
 };
 
 app.send = function send(data) {
@@ -62,24 +67,57 @@ app.renderMessage = function renderMessage(message) {
 };
 
 app.renderRoom = function renderRoom(roomName) {
-  var newRoom = $('<div class="room"></div>');
-  newRoom.text(roomName);
-  $('#roomSelect').append(newRoom);
+  if ( app.roomNames[roomName] ) {
+    return;
+  }
+  app.roomNames[roomName] = 1;
+  var newRoom = $('<option></option>').attr('value', roomName);
+  newRoom.text(roomName).attr('selected', 'selected');
+  $('#roomSelect').find('.roomDropDown').append(newRoom);
 };
 
 app.handleUsernameClick = function handleUsernameClick() {
 
 };
 
+app.roomChange = function roomChange() {
+  app.room = $('#roomSelect').find('.roomDropDown').val();
+  console.log(app.room);
+  if (app.room === 'newroom') {
+    app.room = window.prompt('New room name', 'Enter new room name');
+
+    app.renderRoom(app.room);
+  }
+
+  app.clearMessages();
+  if (app.room === 'lobby') {
+    app.fetch();
+  } else {
+    app.fetch(app.roomChangeFetchHandler);
+  }
+};
+
+app.roomChangeFetchHandler = function(data) {
+  var messages = data.responseJSON.results;
+  messages.forEach(function(message) {
+    if (message.roomname === app.room) {
+      app.renderMessage(message);
+    }
+  });
+};
+
 app.handleSubmit = function handleSubmit(event) {
-  console.log('got into handleSubmit');
+  // console.log('got into handleSubmit');
   // event.preventDefault();
   var obj = {
     text: $('#message').val(),
-    username: app.getQueryVariable('username')
+    username: app.getQueryVariable('username'),
+    roomname: app.room
   };
   console.log(obj);
   app.send(obj);
+  app.refresh();
+  return false;
 
 };
 
@@ -97,7 +135,11 @@ app.getQueryVariable = function getQueryVariable(variable) {
 
 app.refresh = function refresh() {
   app.clearMessages();
-  app.fetch();
+  if (app.room === 'lobby') {
+    app.fetch();
+  } else {
+    app.fetch(app.roomChangeFetchHandler);
+  }
   app.init();
 };
 
