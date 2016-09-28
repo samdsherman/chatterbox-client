@@ -7,19 +7,14 @@ var app = {};
 
 app.server = 'https://api.parse.com/1/classes/messages';
 app.room = 'default';
-app.roomNames = {};
+app.roomNames = {default: true};
 app.friends = {};
 app.tabs = {};
+app.dataFetch = {order: '-createdAt'};
 
 //app functions//////////////////////////////////////////////////////
-app.fetchSuccess = function fetchSuccess(data, urlParameter) {
+app.fetchSuccess = function fetchSuccess(data) {
   var messages = data.responseJSON.results;
-  // if (urlParameter) {
-  //   for (var i = messages.length - 1; i >= 0; i--) {
-  //     app.renderMessage(messages[i]);
-  //     app.renderRoom(messages[i].roomname);
-  //   }
-  // } else {
   messages.forEach(function(message) {
     app.renderMessage(message);
     //look at message.roomname
@@ -30,13 +25,27 @@ app.fetchSuccess = function fetchSuccess(data, urlParameter) {
 };
 
 app.init = function init() {
-  $('body').on('click', '.panel-heading', app.handleUsernameClick);
+  $('body').on('click', '.panelheading-', app.handleUsernameClick);
   $('body').on('submit', '#send', app.handleSubmit );
   $('body').on('change', '#roomSelect', app.roomChange);
   $('body').on('click', '#refreshButton', app.refresh);
-  $('body').on('click', '.nav-tabs', function(event) {
-    $(this).tab('show');
-  });
+  $('body').on('click', '.nav-tabs', app.handleTabClick);
+};
+
+app.handleTabClick = function handleTabClick(event) {  
+  var $anchor = $(event.target);
+  // console.log($anchor);
+  var clickedRoom = $anchor.parent().data('name');
+  if (app.room === clickedRoom) {
+    return;
+  }
+  app.room = clickedRoom;
+  //updates dropdown
+  $('#roomSelect').val(app.room);
+  app.addTab();
+  app.refresh();
+  $('.nav-tabs').find("[data-name='" + app.room + "']").tab('show');
+
 };
 
 app.send = function send(data) {
@@ -54,14 +63,14 @@ app.sendSuccess = function sendSuccess(data) {
   app.refresh();
 };
 
-app.fetch = function fetch(urlParameter) {
+app.fetch = function fetch() {
   // $.get(app.server, success);
-
-
+  app.dataFetch.where = app.room === 'default' ? undefined : {'roomname': app.room};
   var data = $.ajax({
     type: 'GET',
-    url: app.server + (urlParameter || ''),
-    complete: function(data) { app.fetchSuccess(data, urlParameter); }
+    data: app.dataFetch,
+    url: app.server,
+    complete: function(data) { app.fetchSuccess(data); }
   });
   return data;
 };
@@ -96,13 +105,17 @@ app.renderMessage = function renderMessage(message) {
 };
 
 app.renderRoom = function renderRoom(roomName, setDefault) {
+  if (!roomName) { roomName = 'default'; }
+
   if ( app.roomNames[roomName] ) {
     return;
   }
-
-  app.roomNames[roomName] = 1;
+  // if ( roomName === 'default' ) {
+  //   return;
+  // }
   var newRoom = $('<option></option>').attr('value', roomName);
   newRoom.text(roomName);
+  app.roomNames[newRoom.text()] = true;
   //Will set the room you chose as the default if it existed
   if (setDefault) { newRoom.attr('selected', 'selected'); }
 
@@ -120,17 +133,18 @@ app.roomChange = function roomChange() {
   app.clearMessages();
   var urlParameter = app.getRoomParameter();
 
-  app.fetch( urlParameter );
+  app.fetch();
   //selects the room you want as default
   $('#roomSelect').filter(function() {
     return $(this).val() === app.room;
   }).attr('selected', 'selected');
+
   app.highlightFriends();
 };
 
 app.addTab = function addTab() {
   if (app.tabs[app.room]) {
-    $('li[data-name="' + app.room + '"]').tab('show');
+    $('.nav-tabs').find("[data-name='" + app.room + "']").tab('show');
     return;
   }
   
