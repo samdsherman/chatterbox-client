@@ -9,6 +9,7 @@ app.server = 'https://api.parse.com/1/classes/messages';
 app.room = 'default';
 app.roomNames = {};
 app.friends = {};
+app.tabs = {};
 
 //app functions//////////////////////////////////////////////////////
 app.fetchSuccess = function fetchSuccess(data, urlParameter) {
@@ -44,9 +45,13 @@ app.send = function send(data) {
     type: 'POST',
     url: app.server,
     data: data,
-    complete: app.success,
+    complete: app.sendSuccess,
     dataType: 'JSON'
   });
+};
+
+app.sendSuccess = function sendSuccess(data) {
+  app.refresh();
 };
 
 app.fetch = function fetch(urlParameter) {
@@ -91,7 +96,6 @@ app.renderMessage = function renderMessage(message) {
 };
 
 app.renderRoom = function renderRoom(roomName, setDefault) {
-  console.log(roomName);
   if ( app.roomNames[roomName] ) {
     return;
   }
@@ -115,7 +119,6 @@ app.roomChange = function roomChange() {
 
   app.clearMessages();
   var urlParameter = app.getRoomParameter();
-  console.log(urlParameter);
 
   app.fetch( urlParameter );
   //selects the room you want as default
@@ -126,10 +129,21 @@ app.roomChange = function roomChange() {
 };
 
 app.addTab = function addTab() {
-  var newTab = $('<li role="presentation"><a role="tab" data-toggle="tab"></a></li>')
-                .attr('href', '#' + app.room);
-  newTab.find('a').text(app.room);
-  $('.nav-tabs').append(newTab);
+  if (app.tabs[app.room]) {
+    $('li[data-name="' + app.room + '"]').tab('show');
+    return;
+  }
+  
+  var $newTab = $('<li role="presentation"></li>').data('name', app.room);
+  var $anchor = $('<a role="tab" data-toggle="tab"></a>')
+                .attr('href', '#' + app.room).text(app.room);
+  $newTab.append($anchor);
+  $('.nav-tabs').append($newTab);
+
+  $newTab.tab('show');
+  // console.log($('.nav-tabs').find('li'));
+  // console.log($('#sendForm'));
+  app.tabs[app.room] = true;
 };
 
 
@@ -153,7 +167,6 @@ app.handleSubmit = function handleSubmit(event) {
     roomname: app.room
   };
   app.send(obj);
-  app.refresh();
   $( '#send' ).each(function() {
     this.reset();
   });
@@ -176,7 +189,6 @@ app.getQueryVariable = function getQueryVariable(variable) {
 app.refresh = function refresh() {
   app.clearMessages();
   var param = app.getRoomParameter();
-  console.log(param);
   app.fetch(param);
 };
 
